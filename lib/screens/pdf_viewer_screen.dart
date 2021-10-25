@@ -1,10 +1,9 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
 
 class PdfViewerScreen extends StatefulWidget {
-  final PDFDocument document;
-  const PdfViewerScreen({Key? key, required this.document}) : super(key: key);
+  final String filePath;
+  const PdfViewerScreen({Key? key, required this.filePath}) : super(key: key);
 
   @override
   _PdfViewerScreenState createState() => _PdfViewerScreenState();
@@ -12,19 +11,20 @@ class PdfViewerScreen extends StatefulWidget {
 
 class _PdfViewerScreenState extends State<PdfViewerScreen> {
   bool _isLoading = true;
-  final pdfController = PdfController(
-    document: PdfDocument.openFile('assets/sample.pdf'),
-  );
+  late PdfController pdfController;
 
   @override
   void initState() {
+    pdfController = PdfController(
+      document: PdfDocument.openFile(widget.filePath),
+    );
     _isLoading = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    int _totalPages = widget.document.count;
+    // int _totalPages = widget.document.count;
     PageController _pageController = PageController();
     return Scaffold(
       backgroundColor: Colors.yellow,
@@ -35,13 +35,14 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : Scrollbar(
-                controller: _pageController,
+                // controller: _pageController,
                 isAlwaysShown: true,
                 interactive: true,
                 thickness: 15,
                 radius: const Radius.circular(28),
                 child: PdfView(
                   controller: pdfController,
+                  scrollDirection: Axis.vertical,
                 ),
                 // PDFViewer(
                 //   controller: _pageController,

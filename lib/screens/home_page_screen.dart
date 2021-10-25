@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf_reader/screens/pdf_viewer_screen.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -29,10 +30,11 @@ class _MyHomePageState extends State<HomePageScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Loading...')),
                 );
-                PDFDocument _document = await PDFDocument.fromURL(
+                String filePath = await createFileOfPdfUrl(
                     'https://juventudedesporto.cplp.org/files/sample-pdf_9359.pdf');
+
                 ScaffoldMessenger.of(context).clearSnackBars();
-                _openPdfViewerScreen(context, _document);
+                _openPdfViewerScreen(context, filePath);
               },
               icon: const Icon(Icons.cloud),
               label: const Text('From Internet'),
@@ -42,9 +44,9 @@ class _MyHomePageState extends State<HomePageScreen> {
                 FilePickerResult? _result = await FilePicker.platform.pickFiles(
                     type: FileType.custom, allowedExtensions: ['pdf']);
                 if (_result == null) return;
-                File _file = File(_result.files.single.path!);
-                PDFDocument _document = await PDFDocument.fromFile(_file);
-                _openPdfViewerScreen(context, _document);
+                // File _file = File(_result.files.single.path!);
+                // PDFDocument _document = await PDFDocument.fromFile(_file);
+                _openPdfViewerScreen(context, _result.files.single.path!);
               },
               icon: const Icon(Icons.folder_rounded),
               label: const Text('From Storage'),
@@ -55,12 +57,24 @@ class _MyHomePageState extends State<HomePageScreen> {
     );
   }
 
-  Future<dynamic> _openPdfViewerScreen(
-      BuildContext context, PDFDocument _document) {
+  Future<dynamic> _openPdfViewerScreen(BuildContext context, String filePath) {
     return Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PdfViewerScreen(document: _document),
+        builder: (context) => PdfViewerScreen(filePath: filePath),
       ),
     );
+  }
+
+  Future<String> createFileOfPdfUrl(String url) async {
+    final _url = url;
+    final filename = _url.substring(_url.lastIndexOf("/") + 1);
+    var request = await HttpClient().getUrl(Uri.parse(_url));
+    var response = await request.close();
+    var bytes = await consolidateHttpClientResponseBytes(response);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File('$dir/$filename');
+    await file.writeAsBytes(bytes);
+    // return file;
+    return '$dir/$filename';
   }
 }

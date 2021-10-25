@@ -37,6 +37,8 @@ dependencies:
   # advance_pdf_viewer: ^2.0.0 #https://pub.dev/packages/advance_pdf_viewer
   file_picker: ^4.1.6
   native_pdf_view: ^5.0.0 #https://pub.dev/packages/native_pdf_view
+  path_provider: ^2.0.5
+  
 
 dev_dependencies:
   flutter_test:
