@@ -1,5 +1,6 @@
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:native_pdf_view/native_pdf_view.dart';
 
 class PdfViewerScreen extends StatefulWidget {
   final PDFDocument document;
@@ -11,6 +12,9 @@ class PdfViewerScreen extends StatefulWidget {
 
 class _PdfViewerScreenState extends State<PdfViewerScreen> {
   bool _isLoading = true;
+  final pdfController = PdfController(
+    document: PdfDocument.openFile('assets/sample.pdf'),
+  );
 
   @override
   void initState() {
@@ -36,25 +40,28 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
                 interactive: true,
                 thickness: 15,
                 radius: const Radius.circular(28),
-                child: PDFViewer(
-                  controller: _pageController,
-                  document: widget.document,
-                  scrollDirection: Axis.vertical,
-                  onPageChanged: (index) {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        width: 100,
-                        behavior: SnackBarBehavior.floating,
-                        content: Text('Page ${index + 1}/$_totalPages'),
-                        duration: const Duration(milliseconds: 500),
-                      ),
-                    );
-                  },
-                  showIndicator: false,
-                  showPicker: false,
-                  zoomSteps: 1,
+                child: PdfView(
+                  controller: pdfController,
                 ),
+                // PDFViewer(
+                //   controller: _pageController,
+                //   document: widget.document,
+                //   scrollDirection: Axis.vertical,
+                //   onPageChanged: (index) {
+                //     ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(
+                //         width: 100,
+                //         behavior: SnackBarBehavior.floating,
+                //         content: Text('Page ${index + 1}/$_totalPages'),
+                //         duration: const Duration(milliseconds: 500),
+                //       ),
+                //     );
+                //   },
+                //   showIndicator: false,
+                //   showPicker: false,
+                //   zoomSteps: 1,
+                // ),
               ),
       ),
     );
