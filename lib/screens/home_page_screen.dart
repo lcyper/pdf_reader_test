@@ -8,6 +8,8 @@ import 'package:pdf_reader/screens/pdf_viewer_screen.dart';
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key, required this.title}) : super(key: key);
   final String title;
+  final String _urlFile =
+      'https://drive.google.com/file/d/0B6MvcSFEGyoxdTVjMWlOSXVHbDQ/view?resourcekey=0-YQoksS6JJRGKog94HTNGww';
 
   @override
   State<HomePageScreen> createState() => _MyHomePageState();
@@ -29,8 +31,8 @@ class _MyHomePageState extends State<HomePageScreen> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Loading...')),
                 );
-                PDFDocument _document = await PDFDocument.fromURL(
-                    'https://juventudedesporto.cplp.org/files/sample-pdf_9359.pdf');
+                PDFDocument _document =
+                    await PDFDocument.fromURL(widget._urlFile);
                 ScaffoldMessenger.of(context).clearSnackBars();
                 _openPdfViewerScreen(context, _document);
               },
