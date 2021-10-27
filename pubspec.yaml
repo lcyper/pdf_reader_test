@@ -36,8 +36,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   advance_pdf_viewer: ^2.0.0 #https://pub.dev/packages/advance_pdf_viewer
   file_picker: ^4.1.6
+  # pdf_image_renderer: ^0.6.1 #https://pub.dev/packages/pdf_image_renderer
+  native_pdf_renderer: ^4.0.0 #https://pub.dev/packages/native_pdf_renderer
   # native_pdf_view: ^5.0.0 #https://pub.dev/packages/native_pdf_view
   # flutter_pdfview: ^1.2.1 #https://pub.dev/packages/flutter_pdfview
+
 
 dev_dependencies:
   flutter_test:
@@ -62,7 +65,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

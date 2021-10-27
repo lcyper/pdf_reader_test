@@ -8,8 +8,7 @@ import 'package:pdf_reader/screens/pdf_viewer_screen.dart';
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key, required this.title}) : super(key: key);
   final String title;
-  final String _urlFile =
-      'https://drive.google.com/file/d/0B6MvcSFEGyoxdTVjMWlOSXVHbDQ/view?resourcekey=0-YQoksS6JJRGKog94HTNGww';
+  final String _filePath = 'assets/א. בראשית.pdf';
 
   @override
   State<HomePageScreen> createState() => _MyHomePageState();
@@ -32,12 +31,15 @@ class _MyHomePageState extends State<HomePageScreen> {
                   const SnackBar(content: Text('Loading...')),
                 );
                 PDFDocument _document =
-                    await PDFDocument.fromURL(widget._urlFile);
+                    await PDFDocument.fromAsset(widget._filePath);
                 ScaffoldMessenger.of(context).clearSnackBars();
-                _openPdfViewerScreen(context, _document);
+                _openPdfViewerScreen(
+                    context: context,
+                    document: _document,
+                    filePath: widget._filePath);
               },
               icon: const Icon(Icons.cloud),
-              label: const Text('From Internet'),
+              label: const Text('From Assets'),
             ),
             ElevatedButton.icon(
               onPressed: () async {
@@ -46,10 +48,14 @@ class _MyHomePageState extends State<HomePageScreen> {
                 if (_result == null) return;
                 File _file = File(_result.files.single.path!);
                 PDFDocument _document = await PDFDocument.fromFile(_file);
-                _openPdfViewerScreen(context, _document);
+                _openPdfViewerScreen(
+                  context: context,
+                  document: _document,
+                  filePath: _result.files.single.path!,
+                );
               },
               icon: const Icon(Icons.folder_rounded),
-              label: const Text('From Storage'),
+              label: const Text('Pick From Storage'),
             ),
           ],
         ),
@@ -58,10 +64,13 @@ class _MyHomePageState extends State<HomePageScreen> {
   }
 
   Future<dynamic> _openPdfViewerScreen(
-      BuildContext context, PDFDocument _document) {
+      {required BuildContext context,
+      required PDFDocument document,
+      required String filePath}) {
     return Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PdfViewerScreen(document: _document),
+        builder: (context) =>
+            PdfViewerScreen(document: document, filePath: filePath),
       ),
     );
   }
