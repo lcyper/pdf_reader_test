@@ -3,7 +3,7 @@ import 'dart:io';
 // import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
+import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart' show PDFDocument;
 import 'package:pdf_reader/screens/pdf_viewer_screen.dart';
 
 class HomePageScreen extends StatefulWidget {
