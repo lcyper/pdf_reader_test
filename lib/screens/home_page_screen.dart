@@ -8,7 +8,7 @@ import 'package:pdf_reader/screens/pdf_viewer_screen.dart';
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key, required this.title}) : super(key: key);
   final String title;
-  final String _filePath = 'assets/א. בראשית.pdf';
+  final String _filePath = 'assets/bereshit.pdf';
 
   @override
   State<HomePageScreen> createState() => _MyHomePageState();
