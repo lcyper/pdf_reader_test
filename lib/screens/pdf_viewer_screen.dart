@@ -26,10 +26,11 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     super.initState();
   }
 
+  final PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
     int _totalPages = widget.document.count;
-    PageController _pageController = PageController();
     List<Uint8List> pdfImages = [];
     return Scaffold(
       // backgroundColor: Colors.yellow,
@@ -40,12 +41,13 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
               onPressed: () async {
                 final int? selectedPage = await Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => PdfGridViewerScreen(
-                        imagesList: pdfImages, onClic: (int) {}),
+                    builder: (context) => PdfGridViewerScreen(pdfImages),
                   ),
                 );
                 if (selectedPage != null) {
-                  _pageController.jumpToPage(selectedPage);
+                  if (_pageController.hasClients) {
+                    _pageController.jumpToPage(selectedPage - 1);
+                  }
                 }
               },
               icon: const Icon(Icons.grid_view_rounded))
@@ -63,6 +65,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
                     thickness: 15,
                     radius: const Radius.circular(28),
                     child: PDFViewer(
+                      lazyLoad: false,
                       showNavigation: false,
                       controller: _pageController,
                       document: widget.document,
@@ -108,7 +111,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
                   ),
                 );
               }
-              return Container();
+              return const LinearProgressIndicator();
             },
           ),
         ],
