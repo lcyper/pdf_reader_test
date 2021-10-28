@@ -1,3 +1,5 @@
+// import 'dart:typed_data';
+
 import 'dart:typed_data';
 
 import 'package:native_pdf_renderer/native_pdf_renderer.dart';
@@ -53,13 +55,34 @@ import 'package:native_pdf_renderer/native_pdf_renderer.dart';
 // }
 
 class RenderPdfToImage {
-  Future<Uint8List?> getImages(String filePath) async {
-    final PdfDocument document = await PdfDocument.openAsset(filePath);
-    final PdfPage page = await document.getPage(1);
-    final PdfPageImage? pageImage =
-        await page.render(width: page.width, height: page.height);
-    await page.close();
+  Future<List<Uint8List>?> getImages(String filePath) async {
+    print(filePath);
 
-    return pageImage?.bytes;
+    final document = await PdfDocument.openAsset(filePath);
+    int _totalPages = document.pagesCount;
+    List<Uint8List> imageList = [];
+
+    for (var i = 1; i <= _totalPages; i++) {
+      final PdfPage page = await document.getPage(i);
+      final PdfPageImage? pageImage =
+          await page.render(width: page.width, height: page.height);
+      if (pageImage != null) {
+        imageList.add(pageImage.bytes);
+      }
+      await page.close();
+    }
+    if (imageList.isEmpty) return null;
+
+    return imageList;
   }
+
+  // Future<Uint8List?> getImages(String filePath) async {
+  //   final PdfDocument document = await PdfDocument.openAsset(filePath);
+  //   final PdfPage page = await document.getPage(1);
+  //   final PdfPageImage? pageImage =
+  //       await page.render(width: page.width, height: page.height);
+  //   await page.close();
+
+  //   return pageImage?.bytes;
+  // }
 }
